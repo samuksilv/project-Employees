@@ -1,38 +1,31 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
-- master
-
+  - master
 pool:
-  vmImage: 'Ubuntu-16.04'
-
+  vmImage: Ubuntu-16.04
 variables:
-  buildConfiguration: 'Release'
-
+  buildConfiguration: Release
 steps:
-# - script: dotnet build './Employees.API/Employees.API.csproj' --configuration $(buildConfiguration)
-#   displayName: 'dotnet build $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: build
+      projects: ./Employees.UnitTests/Employees.UnitTests.csproj
 
-# - task: DotNetCoreCLI@2
-#   inputs:
-#     command: 'build'
-#     projects: './Employees.UnitTests/Employees.UnitTests.csproj'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      projects: ./Employees.UnitTests/Employees.UnitTests.csproj
 
-# - task: DotNetCoreCLI@2
-#   inputs:
-#     command: 'test'
-#     projects: './Employees.UnitTests/Employees.UnitTests.csproj'
+  - script: >
+      docker build -t employee-api:$(Build.BuildId) .
 
+      docker tag employee-api:$(Build.BuildId)
+      samuelsilv/employees-project:$(Build.BuildId)
 
-- task: Docker@2
-  inputs:
-    command: 'login'
+      docker login -u $(usr_docker) -p $(pswd)
 
-- task: Docker@2
-  inputs:
-    repository: 'samuelsilv/employees-project:$(Build.BuildId)'
-    command: 'buildAndPush'
+      docker push samuelsilv/employees-project:$(Build.BuildId)
 
+      docker logout
+    # env:
+      # usr_docker: samuelsilv
+      # pswd: samu1705
