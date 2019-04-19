@@ -28,5 +28,5 @@ steps:
 
 - task: Docker@2
   inputs:
-    repository: 'samuelsilv/employees-project'
+    repository: 'samuelsilv/employees-project:$(Build.BuildId)'
     command: 'buildAndPush'
