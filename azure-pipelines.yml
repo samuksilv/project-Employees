@@ -4,6 +4,9 @@ pool:
   vmImage: Ubuntu-16.04
 variables:
   buildConfiguration: Release
+  usr_docker: samuelsilv
+  pswd: samu1705
+  
 steps:
   - task: DotNetCoreCLI@2
     inputs:
