@@ -13,20 +13,26 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build './Employees.API/Employees.API.csproj' --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+# - script: dotnet build './Employees.API/Employees.API.csproj' --configuration $(buildConfiguration)
+#   displayName: 'dotnet build $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: './Employees.UnitTests/Employees.UnitTests.csproj'
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'build'
+#     projects: './Employees.UnitTests/Employees.UnitTests.csproj'
 
-- task: DotNetCoreCLI@2
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'test'
+#     projects: './Employees.UnitTests/Employees.UnitTests.csproj'
+
+
+- task: Docker@2
   inputs:
-    command: 'test'
-    projects: './Employees.UnitTests/Employees.UnitTests.csproj'
+    command: 'login'
 
 - task: Docker@2
   inputs:
     repository: 'samuelsilv/employees-project:$(Build.BuildId)'
     command: 'buildAndPush'
+
