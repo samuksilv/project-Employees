@@ -19,16 +19,13 @@ steps:
       projects: ./Employees.UnitTests/Employees.UnitTests.csproj
 
   - script: >
-      docker build -t employee-api:$(Build.BuildId) .
+      docker build -t employee-api:v$(Build.BuildId) .
 
-      docker tag employee-api:$(Build.BuildId)
-      samuelsilv/employees-project:$(Build.BuildId)
+      docker tag employee-api:v$(Build.BuildId)
+      samuelsilv/employees-project:v$(Build.BuildId)
 
       docker login -u $(usr_docker) -p $(pswd)
 
-      docker push samuelsilv/employees-project:$(Build.BuildId)
+      docker push samuelsilv/employees-project:v$(Build.BuildId)
 
-      docker logout
-    # env:
-      # usr_docker: samuelsilv
-      # pswd: samu1705
+      docker logout  
